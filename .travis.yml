@@ -1,8 +1,15 @@
 os: linux
-dist: xenial
+dist: bionic
 language: minimal
 services:
 - docker
 script:
-- ./build.sh _travis-${TRAVIS_OS_NAME}
-- ./scripts/travis_test.sh
+- ./build.sh linux
+- find . -name ooniprobe -type f
+- ./debian/build_package.sh
+
+#deploy:
+#  provider: bintray
+#  user: ooni
+#  key: '$BINTRAY_API_KEY'
+#  skip_cleanup: true
