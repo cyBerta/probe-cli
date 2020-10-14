@@ -16,3 +16,5 @@ require (
 	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22 // indirect
 	upper.io/db.v3 v3.7.1+incompatible
 )
+
+replace github.com/ooni/probe-engine => github.com/cyberta/probe-engine v0.18.1

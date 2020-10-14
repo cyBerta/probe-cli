@@ -41,6 +41,7 @@ var NettestGroups = map[string]NettestGroup{
 		Nettests: []Nettest{
 			Psiphon{},
 			Tor{},
+			RiseupVPN{},
 		},
 	},
 }
