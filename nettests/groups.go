@@ -39,9 +39,9 @@ var NettestGroups = map[string]NettestGroup{
 	"circumvention": {
 		Label: "Circumvention Tools",
 		Nettests: []Nettest{
+			RiseupVPN{},
 			Psiphon{},
 			Tor{},
-			RiseupVPN{},
 		},
 	},
 }
