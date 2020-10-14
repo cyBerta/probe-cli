@@ -1,7 +1,5 @@
 package nettests
 
-import "fmt"
-
 // RiseupVPN test implementation
 type RiseupVPN struct {
 }
@@ -19,34 +17,37 @@ func (h RiseupVPN) Run(ctl *Controller) error {
 
 // RiseupVPNTestKeys contains the test keys
 type RiseupVPNTestKeys struct {
-	ApiBlocked      bool `json:"riseupvpn_api_blocked"`
+	APIBlocked      bool `json:"riseupvpn_api_blocked"`
 	ValidCACert     bool `json:"riseupvpn_ca_cert_valid"`
-	FailingGateways bool `json:"riseupvpn_failing_gateways"`
+	FailingGateways int  `json:"riseupvpn_failing_gateways"`
 	IsAnomaly       bool `json:"-"`
 }
 
 // GetTestKeys generates a summary for a test run
 func (h RiseupVPN) GetTestKeys(tk map[string]interface{}) (interface{}, error) {
 	var (
-		apiBlocked     bool
-		hasValidCert   bool
-		gatewayFailure bool
-		isAnomaly      bool
+		apiBlocked      bool
+		hasValidCert    bool
+		gatewayFailures int
+		isAnomaly       bool
 	)
 	hasValidCert = tk["riseupvpn_ca_cert_status"].(bool)
 	apiBlocked = tk["riseupvpn_api_status"] != "ok"
-	gatewayFailure = tk["riseupvpn_failing_gateways"] != nil
+	if tk["riseupvpn_failing_gateways"] == nil {
+		gatewayFailures = 0
+	} else {
+		objSlice, ok := tk["riseupvpn_failing_gateways"].([]interface{})
+		if ok {
+			gatewayFailures = len(objSlice)
+		}
+	}
 
-	fmt.Println(tk["riseupvpn_ca_cert_status"])
-	fmt.Println(tk["riseupvpn_api_status"])
-	fmt.Println(tk["riseupvpn_failing_gateways"])
-
-	isAnomaly = apiBlocked || gatewayFailure
+	isAnomaly = apiBlocked || gatewayFailures != 0
 
 	return RiseupVPNTestKeys{
-		ApiBlocked:      apiBlocked,
+		APIBlocked:      apiBlocked,
 		ValidCACert:     hasValidCert,
-		FailingGateways: gatewayFailure,
+		FailingGateways: gatewayFailures,
 		IsAnomaly:       isAnomaly,
 	}, nil
 }
